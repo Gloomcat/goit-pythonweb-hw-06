@@ -1,5 +1,5 @@
 [project]
-name = "goit-pythonweb-hw-06"
+name = "app"
 version = "0.1.0"
 description = ""
 authors = [
@@ -21,4 +21,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
-

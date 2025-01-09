@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:12
     environment:
-      POSTGRES_DB: app_db
+      POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
