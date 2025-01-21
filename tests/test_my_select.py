@@ -3,18 +3,19 @@ import logging
 
 import app.my_select as queries
 
+from app.logger import LOGGER
 from app.database import AsyncSessionLocal
 from app.seed import seed_database, verify_tables
 
 
 @pytest.mark.asyncio
 async def test_queries(caplog):
-    caplog.set_level(logging.INFO)
     if not await verify_tables():
         await seed_database()
     assert await verify_tables()
 
-    async with AsyncSessionLocal() as session:
+    try:
+        session = AsyncSessionLocal()
         await queries.select_1(session)
         await queries.select_2(session)
         await queries.select_3(session)
@@ -25,3 +26,5 @@ async def test_queries(caplog):
         await queries.select_8(session)
         await queries.select_9(session)
         await queries.select_10(session)
+    except Exception as e:
+        pytest.fail(e)
