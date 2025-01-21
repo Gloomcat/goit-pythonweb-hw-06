@@ -1,10 +1,10 @@
-import asyncio
 from random import randint, choice, sample
 from faker import Faker
 from faker.providers import DynamicProvider
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql import select
+
 from app.database import AsyncSessionLocal
+from app.logger import LOGGER
 from app.models import (
     Student,
     Group,
@@ -13,7 +13,6 @@ from app.models import (
     Grade,
     teacher_subject_association,
 )
-from app.logger import LOGGER
 
 fake = Faker()
 

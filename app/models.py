@@ -91,3 +91,12 @@ class Grade(Base):
         if value > datetime.now():
             raise ValueError("Time of grade received must be in the past.")
         return value
+
+
+NAME_TO_TABLE = {
+    "Group": Group,
+    "Student": Student,
+    "Teacher": Teacher,
+    "Subject": Subject,
+    "Grade": Grade,
+}

@@ -201,6 +201,6 @@ async def select_10(session: AsyncSession) -> None:
         LOGGER.info("--------------------------------------------------------")
         LOGGER.info(
             f"Student '{student.name}' attends subjects: {
-                subjects}, taught by teacher {teacher.name}"
+                subjects}, taught by teacher '{teacher.name}'"
         )
         LOGGER.info("--------------------------------------------------------")
