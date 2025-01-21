@@ -3,16 +3,11 @@ import argparse
 
 from app.database import AsyncSessionLocal
 from app.services import create, update, list, remove
-from app.seed import seed_database, verify_tables
 from app.models import NAME_TO_TABLE
 from app.logger import LOGGER
 
 
 async def main():
-    if not await verify_tables():
-        await seed_database()
-    assert await verify_tables()
-
     parser = argparse.ArgumentParser(
         description="CLI tool for database management")
     parser.add_argument(
@@ -61,30 +56,28 @@ async def main():
 
     args = parser.parse_args()
 
-    async with AsyncSessionLocal() as session:
-        if args.model in NAME_TO_TABLE:
-            model = NAME_TO_TABLE[args.model]
-            kwargs = {
-                k: v
-                for k, v in vars(args).items()
-                if v is not None and k not in ["action", "model", "id"]
-            }
+    try:
+        async with AsyncSessionLocal() as session:
+            if args.model in NAME_TO_TABLE:
+                model = NAME_TO_TABLE[args.model]
+                kwargs = {
+                    k: v
+                    for k, v in vars(args).items()
+                    if v is not None and k not in ["action", "model", "id"]
+                }
 
-            if args.action == "create" and (args.name or args.grade):
-                await create(session, model, **kwargs)
-            elif args.action == "update" and args.id:
-                await update(session, model, args.id, **kwargs)
-            elif args.action == "list":
-                await list(session, model)
-            elif args.action == "remove" and args.id:
-                await remove(session, model, args.id)
+                if args.action == "create" and (args.name or args.grade):
+                    await create(session, model, **kwargs)
+                elif args.action == "update" and args.id:
+                    await update(session, model, args.id, **kwargs)
+                elif args.action == "list":
+                    await list(session, model)
+                elif args.action == "remove" and args.id:
+                    await remove(session, model, args.id)
             else:
-                LOGGER.warning(
-                    f"Invalid action for {
-                        model.__name__} model."
-                )
-        else:
-            LOGGER.warning(f"Model {args.model} not yet implemented.")
+                LOGGER.warning(f"Model {args.model} not yet implemented.")
+    except Exception as e:
+        LOGGER.critical(f"Unexpected error: {e}")
 
 
 if __name__ == "__main__":
